@@ -93,19 +93,19 @@ export default function Header() {
         </div>
 
         {/* Notifications */}
-        <div className="relative">
+        <div className="relative flex items-center justify-center">
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="w-5 h-5" />
-            {unreadCount > 0 && (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center font-medium"
-              >
-                {unreadCount}
-              </motion.div>
-            )}
           </Button>
+          {unreadCount > 0 && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="absolute -top-2 -right-2 w-6 h-6 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center font-medium shadow-sm border-2 border-background"
+            >
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </motion.div>
+          )}
         </div>
 
         {/* User Menu */}
