@@ -7,17 +7,21 @@ import {
   Bell,
   ChevronDown,
   HelpCircle,
+  LogOut,
   Menu,
   Search,
   Settings,
   User,
 } from "lucide-react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useSidebar } from "./sidebar-context";
 
 export default function Header() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { toggleSidebar } = useSidebar();
+  const router = useRouter();
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const [notifications] = useState([
     {
       id: 1,
@@ -35,6 +39,30 @@ export default function Header() {
   ]);
 
   const unreadCount = notifications.filter((n) => n.unread).length;
+
+  const handleLogout = () => {
+    router.push("/login");
+  };
+
+  // Handle click outside to close menu
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowUserMenu(false);
+      }
+    }
+
+    if (showUserMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showUserMenu]);
 
   return (
     <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm px-6 flex items-center justify-between sticky top-0 z-30">
@@ -81,7 +109,7 @@ export default function Header() {
         </div>
 
         {/* User Menu */}
-        <div className="relative">
+        <div className="relative" ref={userMenuRef}>
           <Button
             variant="ghost"
             className="flex items-center space-x-2 h-10 px-3"
@@ -126,6 +154,15 @@ export default function Header() {
                   <Button variant="ghost" className="w-full justify-start h-10">
                     <HelpCircle className="w-4 h-4 mr-3" />
                     Help
+                  </Button>
+                  <div className="border-t border-border my-2" />
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start h-10 text-destructive hover:text-destructive hover:bg-destructive/10"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="w-4 h-4 mr-3" />
+                    Logout
                   </Button>
                 </div>
               </motion.div>
