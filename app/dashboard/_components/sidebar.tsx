@@ -2,13 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import {
-  BarChart3,
-  LayoutDashboard,
-  LogOut,
-  Settings,
-  Users,
-} from "lucide-react";
+import { BarChart3, LayoutDashboard, Settings, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSidebar } from "./sidebar-context";
@@ -24,10 +18,6 @@ export default function Sidebar() {
   const [activeItem, setActiveItem] = useState("Overview");
   const { isCollapsed } = useSidebar();
   const router = useRouter();
-
-  const handleLogout = () => {
-    router.push("/login");
-  };
 
   const handleNavigation = (label: string, href: string) => {
     setActiveItem(label);
@@ -89,34 +79,21 @@ export default function Sidebar() {
             ))}
           </nav>
 
-          {/* User Info */}
+          {/* Developer Credit */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
             className="p-4 border-t border-border"
           >
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center shadow-md">
-                <span className="text-primary-foreground text-sm font-semibold">
-                  A
+            <div className="text-center">
+              <p className="text-xs text-muted-foreground">
+                Developed by{" "}
+                <span className="font-medium text-primary">
+                  Emran Ibn Shayed
                 </span>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium">Admin User</p>
-                <p className="text-xs text-muted-foreground">
-                  admin@example.com
-                </p>
-              </div>
+              </p>
             </div>
-            <Button
-              variant="outline"
-              className="w-full justify-start h-10"
-              onClick={handleLogout}
-            >
-              <LogOut className="w-4 h-4 mr-3" />
-              Logout
-            </Button>
           </motion.div>
         </div>
       </motion.div>
