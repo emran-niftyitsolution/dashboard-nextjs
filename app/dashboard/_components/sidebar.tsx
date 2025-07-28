@@ -3,8 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { BarChart3, LayoutDashboard, Settings, Users } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useSidebar } from "./sidebar-context";
 
 const menuItems = [
@@ -15,12 +14,17 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
-  const [activeItem, setActiveItem] = useState("Overview");
   const { isCollapsed } = useSidebar();
   const router = useRouter();
+  const pathname = usePathname();
 
-  const handleNavigation = (label: string, href: string) => {
-    setActiveItem(label);
+  // Get the current active item based on pathname
+  const getActiveItem = () => {
+    const currentItem = menuItems.find((item) => item.href === pathname);
+    return currentItem ? currentItem.label : "Overview";
+  };
+
+  const handleNavigation = (href: string) => {
     router.push(href);
   };
 
@@ -64,13 +68,13 @@ export default function Sidebar() {
                 transition={{ delay: 0.1 + index * 0.1 }}
               >
                 <Button
-                  variant={activeItem === item.label ? "default" : "ghost"}
+                  variant={getActiveItem() === item.label ? "default" : "ghost"}
                   className={`w-full justify-start h-12 text-left transition-all duration-200 ${
-                    activeItem === item.label
+                    getActiveItem() === item.label
                       ? "bg-primary text-primary-foreground shadow-md"
                       : "hover:bg-accent hover:text-accent-foreground"
                   }`}
-                  onClick={() => handleNavigation(item.label, item.href)}
+                  onClick={() => handleNavigation(item.href)}
                 >
                   <item.icon className="w-5 h-5 mr-3" />
                   {item.label}
