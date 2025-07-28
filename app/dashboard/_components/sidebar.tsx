@@ -41,7 +41,7 @@ export default function Sidebar() {
         initial={{ x: -280 }}
         animate={{ x: isCollapsed ? -280 : 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed lg:relative lg:translate-x-0 z-40 w-70 h-screen bg-card border-r border-border shadow-lg"
+        className="fixed lg:absolute lg:left-0 z-40 w-70 h-screen bg-card border-r border-border shadow-lg"
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
@@ -83,7 +83,7 @@ export default function Sidebar() {
                   onClick={() => handleNavigation(item.label, item.href)}
                 >
                   <item.icon className="w-5 h-5 mr-3" />
-                  <span className="font-medium">{item.label}</span>
+                  {item.label}
                 </Button>
               </motion.div>
             ))}
