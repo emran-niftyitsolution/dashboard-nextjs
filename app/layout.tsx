@@ -1,5 +1,7 @@
+import { ClientProvider } from "@/components/providers/client-provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,7 +35,10 @@ export default function RootLayout({
           } as React.CSSProperties
         }
       >
-        {children}
+        <ClientProvider>
+          {children}
+          <Toaster position="top-right" richColors />
+        </ClientProvider>
       </body>
     </html>
   );

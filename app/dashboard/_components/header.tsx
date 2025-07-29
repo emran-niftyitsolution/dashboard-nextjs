@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/lib/hooks/useAuth";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Bell,
@@ -20,6 +21,7 @@ import { useSidebar } from "./sidebar-context";
 export default function Header() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { toggleSidebar } = useSidebar();
+  const { user, logout } = useAuth();
   const router = useRouter();
   const userMenuRef = useRef<HTMLDivElement>(null);
   const [notifications] = useState([
@@ -41,7 +43,14 @@ export default function Header() {
   const unreadCount = notifications.filter((n) => n.unread).length;
 
   const handleLogout = () => {
-    router.push("/login");
+    logout();
+  };
+
+  const getUserInitials = () => {
+    if (!user) return "U";
+    return `${user.firstName.charAt(0)}${user.lastName.charAt(
+      0
+    )}`.toUpperCase();
   };
 
   // Handle click outside to close menu
@@ -113,12 +122,16 @@ export default function Header() {
           >
             <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center shadow-md">
               <span className="text-primary-foreground text-sm font-semibold">
-                A
+                {getUserInitials()}
               </span>
             </div>
             <div className="hidden md:block text-left">
-              <p className="text-sm font-medium">Admin User</p>
-              <p className="text-xs text-muted-foreground">admin@example.com</p>
+              <p className="text-sm font-medium">
+                {user ? `${user.firstName} ${user.lastName}` : "User"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {user?.email || "user@example.com"}
+              </p>
             </div>
             <ChevronDown className="w-4 h-4 text-muted-foreground" />
           </Button>
@@ -133,10 +146,17 @@ export default function Header() {
                 className="absolute right-0 top-full mt-2 w-64 bg-card border border-border rounded-lg shadow-lg z-50"
               >
                 <div className="p-4 border-b border-border">
-                  <p className="text-sm font-medium">Admin User</p>
-                  <p className="text-xs text-muted-foreground">
-                    admin@example.com
+                  <p className="text-sm font-medium">
+                    {user ? `${user.firstName} ${user.lastName}` : "User"}
                   </p>
+                  <p className="text-xs text-muted-foreground">
+                    {user?.email || "user@example.com"}
+                  </p>
+                  {user?.role && (
+                    <p className="text-xs text-primary mt-1 font-medium">
+                      {user.role}
+                    </p>
+                  )}
                 </div>
                 <div className="p-2">
                   <Button

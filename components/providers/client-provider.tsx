@@ -1,21 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { client } from "@/lib/apollo-client";
+import { store } from "@/lib/store";
+import { ApolloProvider } from "@apollo/client";
+import { Provider } from "react-redux";
 
-interface ClientProviderProps {
-  children: React.ReactNode;
-}
-
-export default function ClientProvider({ children }: ClientProviderProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
-  return <>{children}</>;
+export function ClientProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <Provider store={store}>
+      <ApolloProvider client={client}>{children}</ApolloProvider>
+    </Provider>
+  );
 }
