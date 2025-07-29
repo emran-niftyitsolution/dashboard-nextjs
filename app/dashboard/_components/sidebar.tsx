@@ -38,11 +38,10 @@ export default function Sidebar() {
   return (
     <>
       {/* Sidebar */}
-      <motion.div
-        initial={{ x: -280 }}
-        animate={{ x: isCollapsed ? -280 : 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed lg:absolute lg:left-0 z-40 w-70 h-screen bg-card border-r border-border shadow-lg"
+      <div
+        className={`fixed lg:absolute lg:left-0 z-40 w-70 h-screen bg-card border-r border-border shadow-lg transition-transform duration-300 ${
+          isCollapsed ? "transform -translate-x-full lg:translate-x-0" : ""
+        }`}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
@@ -107,7 +106,7 @@ export default function Sidebar() {
             </div>
           </motion.div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Overlay for mobile */}
       {isCollapsed && (

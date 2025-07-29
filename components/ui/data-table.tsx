@@ -94,7 +94,7 @@ export default function DataTable<T>({
         )}
       >
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full table-fixed">
             <thead className="bg-muted/50 border-b border-border">
               <tr>
                 {columns.map((column) => (
@@ -109,58 +109,63 @@ export default function DataTable<T>({
                   </th>
                 ))}
                 {actions && actions.length > 0 && (
-                  <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">
+                  <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground w-20">
                     Actions
                   </th>
                 )}
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
-              {data.map((item, index) => (
-                <motion.tr
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className={cn(
-                    "hover:bg-muted/50 transition-colors cursor-pointer",
-                    onRowClick && "cursor-pointer"
-                  )}
-                  onClick={() => onRowClick?.(item)}
-                >
-                  {columns.map((column) => (
-                    <td key={column.key} className="px-6 py-4 text-sm">
-                      {column.render
-                        ? column.render(item)
-                        : String(
-                            (item as Record<string, unknown>)[column.key] || ""
-                          )}
-                    </td>
-                  ))}
-                  {actions && actions.length > 0 && (
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end space-x-2">
-                        {actions.map((action, actionIndex) => (
-                          <Button
-                            key={actionIndex}
-                            variant={action.variant || "ghost"}
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              action.onClick(item);
-                            }}
-                            className="h-8 w-8 p-0"
-                          >
-                            {action.icon}
-                          </Button>
-                        ))}
-                      </div>
-                    </td>
-                  )}
-                </motion.tr>
-              ))}
-            </tbody>
           </table>
+          <div className="max-h-96 overflow-y-auto">
+            <table className="w-full table-fixed">
+              <tbody className="divide-y divide-border">
+                {data.map((item, index) => (
+                  <motion.tr
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className={cn(
+                      "hover:bg-muted/50 transition-colors cursor-pointer",
+                      onRowClick && "cursor-pointer"
+                    )}
+                    onClick={() => onRowClick?.(item)}
+                  >
+                    {columns.map((column) => (
+                      <td key={column.key} className="px-6 py-4 text-sm">
+                        {column.render
+                          ? column.render(item)
+                          : String(
+                              (item as Record<string, unknown>)[column.key] ||
+                                ""
+                            )}
+                      </td>
+                    ))}
+                    {actions && actions.length > 0 && (
+                      <td className="px-6 py-4 text-right w-20">
+                        <div className="flex items-center justify-end space-x-2">
+                          {actions.map((action, actionIndex) => (
+                            <Button
+                              key={actionIndex}
+                              variant={action.variant || "ghost"}
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                action.onClick(item);
+                              }}
+                              className="h-8 w-8 p-0"
+                            >
+                              {action.icon}
+                            </Button>
+                          ))}
+                        </div>
+                      </td>
+                    )}
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </Card>
     </motion.div>

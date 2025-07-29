@@ -14,7 +14,7 @@ export default function UsersPage() {
   const [selectedRole, setSelectedRole] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // Filter users based on search term, role, and status
   const filteredUsers = useMemo(() => {
