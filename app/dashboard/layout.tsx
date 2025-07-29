@@ -12,7 +12,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
       <Sidebar />
       <div
         className={`h-full flex flex-col transition-all duration-300 ${
-          isCollapsed ? "lg:ml-0" : "lg:ml-70"
+          isCollapsed ? "ml-0" : "lg:ml-70"
         }`}
       >
         <Header />

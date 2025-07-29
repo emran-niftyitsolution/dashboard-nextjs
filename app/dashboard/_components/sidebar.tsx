@@ -21,7 +21,7 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
-  const { isCollapsed } = useSidebar();
+  const { isCollapsed, toggleSidebar } = useSidebar();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -40,7 +40,7 @@ export default function Sidebar() {
       {/* Sidebar */}
       <div
         className={`fixed lg:absolute lg:left-0 z-40 w-70 h-screen bg-card border-r border-border shadow-lg transition-transform duration-300 ${
-          isCollapsed ? "transform -translate-x-full lg:translate-x-0" : ""
+          isCollapsed ? "transform -translate-x-full" : ""
         }`}
       >
         <div className="flex flex-col h-full">
@@ -109,12 +109,13 @@ export default function Sidebar() {
       </div>
 
       {/* Overlay for mobile */}
-      {isCollapsed && (
+      {!isCollapsed && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
+          onClick={toggleSidebar}
         />
       )}
     </>
