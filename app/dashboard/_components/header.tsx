@@ -76,10 +76,6 @@ export default function Header() {
         >
           <Menu className="w-5 h-5" />
         </Button>
-
-        <h2 className="text-lg font-semibold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-          Dashboard
-        </h2>
       </div>
 
       <div className="flex items-center space-x-4">
