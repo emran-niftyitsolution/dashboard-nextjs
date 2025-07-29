@@ -40,14 +40,20 @@ export default function Select({
     top: 0,
     left: 0,
     width: 0,
+    showAbove: false,
   });
 
   // Click outside handler to close dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Check if the click is on the dropdown portal
+      const target = event.target as Element;
+      const isDropdownClick = target.closest('[data-dropdown="true"]');
+
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current.contains(event.target as Node) &&
+        !isDropdownClick
       ) {
         setIsOpen(false);
       }
@@ -63,13 +69,25 @@ export default function Select({
   useEffect(() => {
     if (isOpen && dropdownRef.current) {
       const rect = dropdownRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const dropdownHeight = Math.min(options.length * 40 + 16, 240); // Approximate dropdown height
+      const spaceBelow = viewportHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      // Show above if there's not enough space below but enough space above
+      const showAbove =
+        spaceBelow < dropdownHeight && spaceAbove > dropdownHeight;
+
       setDropdownPosition({
-        top: rect.bottom + window.scrollY,
+        top: showAbove
+          ? rect.top + window.scrollY - dropdownHeight - 4
+          : rect.bottom + window.scrollY + 4,
         left: rect.left + window.scrollX,
         width: rect.width,
+        showAbove,
       });
     }
-  }, [isOpen]);
+  }, [isOpen, options.length]);
 
   const selectedOption = options.find((option) => option.value === value);
 
@@ -80,6 +98,7 @@ export default function Select({
   };
 
   const handleSelect = (optionValue: string | number) => {
+    console.log("Option selected:", optionValue);
     onChange(optionValue);
     setIsOpen(false);
   };
@@ -128,9 +147,10 @@ export default function Select({
         typeof window !== "undefined" &&
         createPortal(
           <div
+            data-dropdown="true"
             className="fixed bg-card border border-border rounded-lg shadow-xl z-[99999] overflow-hidden max-h-60 overflow-y-auto"
             style={{
-              top: dropdownPosition.top + 4,
+              top: dropdownPosition.top,
               left: dropdownPosition.left,
               width: dropdownPosition.width,
               minWidth: dropdownPosition.width,

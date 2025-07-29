@@ -32,7 +32,7 @@ export default function Pagination({
   endIndex,
   onPageChange,
   onItemsPerPageChange,
-  itemsPerPageOptions = [5, 10, 25, 50],
+  itemsPerPageOptions = [10, 25, 50, 100],
   showItemsPerPage = true,
   className = "",
 }: PaginationProps) {
