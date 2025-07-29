@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import DataTable, { Action, Column } from "@/components/ui/data-table";
 import { Edit, Eye, Trash2 } from "lucide-react";
 import { User } from "./types";
@@ -17,20 +18,18 @@ export default function UserTable({
   onEdit,
   onDelete,
 }: UserTableProps) {
-  const getStatusColor = (status: string) => {
-    return status === "Active"
-      ? "bg-green-100 text-green-800 border-green-200"
-      : "bg-red-100 text-red-800 border-red-200";
+  const getStatusVariant = (status: string) => {
+    return status === "Active" ? "success" : "error";
   };
 
-  const getRoleColor = (role: string) => {
+  const getRoleVariant = (role: string) => {
     switch (role) {
       case "Admin":
-        return "bg-purple-100 text-purple-800 border-purple-200";
+        return "purple";
       case "Moderator":
-        return "bg-blue-100 text-blue-800 border-blue-200";
+        return "info";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "gray";
     }
   };
 
@@ -54,26 +53,14 @@ export default function UserTable({
       key: "role",
       header: "Role",
       render: (user) => (
-        <span
-          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getRoleColor(
-            user.role
-          )}`}
-        >
-          {user.role}
-        </span>
+        <Badge variant={getRoleVariant(user.role)}>{user.role}</Badge>
       ),
     },
     {
       key: "status",
       header: "Status",
       render: (user) => (
-        <span
-          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(
-            user.status
-          )}`}
-        >
-          {user.status}
-        </span>
+        <Badge variant={getStatusVariant(user.status)}>{user.status}</Badge>
       ),
     },
     {
