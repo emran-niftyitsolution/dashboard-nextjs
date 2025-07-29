@@ -43,7 +43,7 @@ export default function Sidebar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="flex items-center space-x-3 p-6 border-b border-border"
+            className="flex items-center space-x-3 p-6 border-b border-border h-16"
           >
             <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-primary-foreground font-bold text-lg">
