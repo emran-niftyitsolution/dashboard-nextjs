@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAuth } from "@/lib/hooks/useAuth";
 import { motion } from "framer-motion";
 import { ArrowUpRight, TrendingUp } from "lucide-react";
 import StatsCards from "./_components/stats-cards";
@@ -66,6 +67,8 @@ const itemVariants = {
 };
 
 export default function DashboardPage() {
+  const { user, isAuthenticated, isLoading } = useAuth();
+
   return (
     <motion.div
       variants={containerVariants}
@@ -73,6 +76,30 @@ export default function DashboardPage() {
       animate="visible"
       className="space-y-8"
     >
+      {/* Debug Section */}
+      <motion.div
+        variants={itemVariants}
+        className="p-4 bg-yellow-100 border border-yellow-300 rounded-lg"
+      >
+        <h3 className="font-semibold text-yellow-800 mb-2">Debug Info:</h3>
+        <div className="text-sm text-yellow-700 space-y-1">
+          <div>isAuthenticated: {isAuthenticated ? "true" : "false"}</div>
+          <div>isLoading: {isLoading ? "true" : "false"}</div>
+          <div>
+            User: {user ? `${user.firstName} ${user.lastName}` : "null"}
+          </div>
+          <div>Email: {user?.email || "null"}</div>
+          <div>
+            Access Token:{" "}
+            {typeof window !== "undefined"
+              ? localStorage.getItem("accessToken")
+                ? "exists"
+                : "missing"
+              : "SSR"}
+          </div>
+        </div>
+      </motion.div>
+
       {/* Header */}
       <motion.div variants={itemVariants} className="space-y-2">
         <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">

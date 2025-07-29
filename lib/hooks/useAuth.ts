@@ -25,6 +25,8 @@ export const useAuth = () => {
   const login = async (data: LoginFormData) => {
     try {
       dispatch(setLoading(true));
+      console.log("Attempting login with:", { email: data.email });
+
       const response = await loginMutation({
         variables: {
           input: {
@@ -34,8 +36,15 @@ export const useAuth = () => {
         },
       });
 
+      console.log("Login response:", response);
+
       if (response.data?.login) {
         const { user, accessToken, refreshToken } = response.data.login;
+        console.log("Login successful, setting credentials:", {
+          user,
+          hasAccessToken: !!accessToken,
+        });
+
         dispatch(setCredentials({ user, accessToken, refreshToken }));
         router.push("/dashboard");
         return { success: true };
@@ -121,6 +130,7 @@ export const useAuth = () => {
   };
 
   const logoutUser = () => {
+    console.log("Logging out user");
     dispatch(logout());
     router.push("/login");
   };

@@ -1,5 +1,6 @@
 "use client";
 
+import { PublicGuard } from "@/components/auth/public-guard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export default function LoginPage() {
+function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const { login, isLoading } = useAuth();
 
@@ -278,5 +279,13 @@ export default function LoginPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <PublicGuard>
+      <LoginForm />
+    </PublicGuard>
   );
 }

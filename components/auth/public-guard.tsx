@@ -4,11 +4,11 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface AuthGuardProps {
+interface PublicGuardProps {
   children: React.ReactNode;
 }
 
-export function AuthGuard({ children }: AuthGuardProps) {
+export function PublicGuard({ children }: PublicGuardProps) {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [isInitialized, setIsInitialized] = useState(false);
@@ -23,8 +23,8 @@ export function AuthGuard({ children }: AuthGuardProps) {
   }, []);
 
   useEffect(() => {
-    if (isInitialized && !isLoading && !isAuthenticated) {
-      router.push("/login");
+    if (isInitialized && !isLoading && isAuthenticated) {
+      router.push("/dashboard");
     }
   }, [isAuthenticated, isLoading, isInitialized, router]);
 
@@ -40,8 +40,8 @@ export function AuthGuard({ children }: AuthGuardProps) {
     );
   }
 
-  // Don't render anything if not authenticated (will redirect)
-  if (!isAuthenticated) {
+  // Don't render anything if authenticated (will redirect)
+  if (isAuthenticated) {
     return null;
   }
 

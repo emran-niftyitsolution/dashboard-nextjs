@@ -12,6 +12,7 @@ export const store = configureStore({
         ignoredPaths: ["auth.user"],
       },
     }),
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 export type RootState = ReturnType<typeof store.getState>;
