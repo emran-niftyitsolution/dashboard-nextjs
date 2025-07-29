@@ -94,9 +94,9 @@ export default function DataTable<T>({
         )}
       >
         <div className="overflow-x-auto">
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-[410px] overflow-y-auto">
             <table className="w-full min-w-full">
-              <thead className="bg-muted/50 border-b border-border sticky top-0 z-10">
+              <thead className="bg-gray-100 border-b border-border sticky top-0 z-10">
                 <tr>
                   {columns.map((column) => (
                     <th
