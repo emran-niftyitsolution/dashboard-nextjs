@@ -218,7 +218,7 @@ export default function PrimaryInputDemo() {
             }
             placeholder="Select your birth date"
             icon={<Calendar className="w-4 h-4" />}
-            maxDate={new Date()}
+            maxDate={new Date("2024-12-31")}
           />
 
           <PrimaryInput

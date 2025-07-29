@@ -1,11 +1,15 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { useUsers } from "@/lib/hooks/useUsers";
 import { motion } from "framer-motion";
-import { useMemo, useState } from "react";
-import { mockUsers } from "./_components/mock-data";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import PageHeader from "./_components/page-header";
 import UserPagination from "./_components/pagination";
+import { User } from "./_components/types";
 import UserFilters from "./_components/user-filters";
 import UserTable from "./_components/user-table";
 
@@ -16,25 +20,42 @@ export default function UsersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  // Filter users based on search term, role, and status
-  const filteredUsers = useMemo(() => {
-    return mockUsers.filter((user) => {
-      const matchesSearch =
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesRole = selectedRole === "All" || user.role === selectedRole;
-      const matchesStatus =
-        selectedStatus === "All" || user.status === selectedStatus;
+  // Debounce search term to avoid too many API calls
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-      return matchesSearch && matchesRole && matchesStatus;
-    });
-  }, [searchTerm, selectedRole, selectedStatus]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+      setCurrentPage(1); // Reset to first page when searching
+    }, 500);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentUsers = filteredUsers.slice(startIndex, endIndex);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  // Prepare API options
+  const apiOptions = {
+    page: currentPage,
+    limit: itemsPerPage,
+    search: debouncedSearchTerm || undefined,
+    status: selectedStatus !== "All" ? selectedStatus : undefined,
+    // Note: Backend doesn't support role filtering yet, so we'll filter client-side
+  };
+
+  const { users, pagination, loading, error, refetch } = useUsers(apiOptions);
+
+  // Filter users by role on client-side since backend doesn't support it yet
+  const filteredUsers =
+    selectedRole === "All"
+      ? users
+      : users.filter((user) => user.role === selectedRole);
+
+  // Handle errors
+  useEffect(() => {
+    if (error) {
+      console.error("Users API error:", error);
+      toast.error("Failed to load users. Please try again.");
+    }
+  }, [error]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -45,41 +66,76 @@ export default function UsersPage() {
     setCurrentPage(1); // Reset to first page when changing items per page
   };
 
+  const handleView = (user: User) => {
+    console.log("View user:", user);
+    // TODO: Implement view user modal/page
+  };
+
+  const handleEdit = (user: User) => {
+    console.log("Edit user:", user);
+    // TODO: Implement edit user modal/page
+  };
+
+  const handleDelete = (user: User) => {
+    console.log("Delete user:", user);
+    // TODO: Implement delete user confirmation
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <PageHeader />
+    <ErrorBoundary>
+      <div className="space-y-6">
+        {/* Header */}
+        <PageHeader />
 
-      {/* Filters */}
-      <UserFilters
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        selectedRole={selectedRole}
-        setSelectedRole={setSelectedRole}
-        selectedStatus={selectedStatus}
-        setSelectedStatus={setSelectedStatus}
-      />
+        {/* Filters */}
+        <UserFilters
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedRole={selectedRole}
+          setSelectedRole={setSelectedRole}
+          selectedStatus={selectedStatus}
+          setSelectedStatus={setSelectedStatus}
+        />
 
-      {/* Table with Pagination */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <Card className="overflow-hidden">
-          <UserTable users={currentUsers} />
-          <UserPagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            itemsPerPage={itemsPerPage}
-            totalItems={filteredUsers.length}
-            startIndex={startIndex}
-            endIndex={endIndex}
-            onPageChange={handlePageChange}
-            onItemsPerPageChange={handleItemsPerPageChange}
-          />
-        </Card>
-      </motion.div>
-    </div>
+        {/* Table with Pagination */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <Card className="overflow-hidden">
+            {loading ? (
+              <div className="p-8 text-center">
+                <LoadingSpinner size="md" text="Loading users..." />
+              </div>
+            ) : (
+              <>
+                <UserTable
+                  users={filteredUsers}
+                  onView={handleView}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+                {pagination && (
+                  <UserPagination
+                    currentPage={pagination.page}
+                    totalPages={pagination.totalPages}
+                    itemsPerPage={pagination.limit}
+                    totalItems={pagination.totalDocs}
+                    startIndex={(pagination.page - 1) * pagination.limit + 1}
+                    endIndex={Math.min(
+                      pagination.page * pagination.limit,
+                      pagination.totalDocs
+                    )}
+                    onPageChange={handlePageChange}
+                    onItemsPerPageChange={handleItemsPerPageChange}
+                  />
+                )}
+              </>
+            )}
+          </Card>
+        </motion.div>
+      </div>
+    </ErrorBoundary>
   );
 }

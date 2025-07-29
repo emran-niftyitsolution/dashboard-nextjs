@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import Select, { SelectOption } from "@/components/ui/select";
+import Select, { SelectOption } from "@/components/ui/primary-input";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 
@@ -17,15 +17,17 @@ interface UserFiltersProps {
 
 const roleOptions: SelectOption[] = [
   { value: "All", label: "All Roles" },
-  { value: "Admin", label: "Admin" },
-  { value: "User", label: "User" },
-  { value: "Moderator", label: "Moderator" },
+  { value: "SUPER_ADMIN", label: "Super Admin" },
+  { value: "ADMIN", label: "Admin" },
+  { value: "USER", label: "User" },
 ];
 
 const statusOptions: SelectOption[] = [
   { value: "All", label: "All Status" },
-  { value: "Active", label: "Active" },
-  { value: "Inactive", label: "Inactive" },
+  { value: "ACTIVE", label: "Active" },
+  { value: "INACTIVE", label: "Inactive" },
+  { value: "BANNED", label: "Banned" },
+  { value: "PENDING", label: "Pending" },
 ];
 
 export default function UserFilters({
@@ -60,6 +62,7 @@ export default function UserFilters({
           {/* Filters */}
           <div className="flex flex-col sm:flex-row gap-2">
             <Select
+              type="select"
               value={selectedRole}
               onChange={(value) => setSelectedRole(String(value))}
               options={roleOptions}
@@ -69,6 +72,7 @@ export default function UserFilters({
             />
 
             <Select
+              type="select"
               value={selectedStatus}
               onChange={(value) => setSelectedStatus(String(value))}
               options={statusOptions}

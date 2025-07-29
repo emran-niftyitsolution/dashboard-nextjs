@@ -18,12 +18,14 @@ type Documents = {
     "\n  mutation Signup($input: SignupInput!) {\n    signup(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        _id\n        firstName\n        lastName\n        email\n        username\n        role\n        status\n      }\n    }\n  }\n": typeof types.SignupDocument,
     "\n  mutation RefreshToken($input: RefreshTokenInput!) {\n    refreshToken(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        _id\n        firstName\n        lastName\n        email\n        username\n        role\n        status\n      }\n    }\n  }\n": typeof types.RefreshTokenDocument,
     "\n  query GetCurrentUser {\n    getUser(input: { _id: \"current\" }) {\n      _id\n      firstName\n      lastName\n      email\n      username\n      role\n      status\n    }\n  }\n": typeof types.GetCurrentUserDocument,
+    "\n  query GetUsers($input: PaginateUserInput!) {\n    getUsers(input: $input) {\n      docs {\n        _id\n        firstName\n        lastName\n        email\n        username\n        phone\n        gender\n        role\n        status\n        lastActiveAt\n        createdAt\n        updatedAt\n      }\n      totalDocs\n      limit\n      totalPages\n      page\n      pagingCounter\n      hasPrevPage\n      hasNextPage\n      prevPage\n      nextPage\n    }\n  }\n": typeof types.GetUsersDocument,
 };
 const documents: Documents = {
     "\n  mutation Login($input: LoginInput!) {\n    login(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        _id\n        firstName\n        lastName\n        email\n        username\n        role\n        status\n      }\n    }\n  }\n": types.LoginDocument,
     "\n  mutation Signup($input: SignupInput!) {\n    signup(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        _id\n        firstName\n        lastName\n        email\n        username\n        role\n        status\n      }\n    }\n  }\n": types.SignupDocument,
     "\n  mutation RefreshToken($input: RefreshTokenInput!) {\n    refreshToken(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        _id\n        firstName\n        lastName\n        email\n        username\n        role\n        status\n      }\n    }\n  }\n": types.RefreshTokenDocument,
     "\n  query GetCurrentUser {\n    getUser(input: { _id: \"current\" }) {\n      _id\n      firstName\n      lastName\n      email\n      username\n      role\n      status\n    }\n  }\n": types.GetCurrentUserDocument,
+    "\n  query GetUsers($input: PaginateUserInput!) {\n    getUsers(input: $input) {\n      docs {\n        _id\n        firstName\n        lastName\n        email\n        username\n        phone\n        gender\n        role\n        status\n        lastActiveAt\n        createdAt\n        updatedAt\n      }\n      totalDocs\n      limit\n      totalPages\n      page\n      pagingCounter\n      hasPrevPage\n      hasNextPage\n      prevPage\n      nextPage\n    }\n  }\n": types.GetUsersDocument,
 };
 
 /**
@@ -56,6 +58,10 @@ export function graphql(source: "\n  mutation RefreshToken($input: RefreshTokenI
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetCurrentUser {\n    getUser(input: { _id: \"current\" }) {\n      _id\n      firstName\n      lastName\n      email\n      username\n      role\n      status\n    }\n  }\n"): (typeof documents)["\n  query GetCurrentUser {\n    getUser(input: { _id: \"current\" }) {\n      _id\n      firstName\n      lastName\n      email\n      username\n      role\n      status\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetUsers($input: PaginateUserInput!) {\n    getUsers(input: $input) {\n      docs {\n        _id\n        firstName\n        lastName\n        email\n        username\n        phone\n        gender\n        role\n        status\n        lastActiveAt\n        createdAt\n        updatedAt\n      }\n      totalDocs\n      limit\n      totalPages\n      page\n      pagingCounter\n      hasPrevPage\n      hasNextPage\n      prevPage\n      nextPage\n    }\n  }\n"): (typeof documents)["\n  query GetUsers($input: PaginateUserInput!) {\n    getUsers(input: $input) {\n      docs {\n        _id\n        firstName\n        lastName\n        email\n        username\n        phone\n        gender\n        role\n        status\n        lastActiveAt\n        createdAt\n        updatedAt\n      }\n      totalDocs\n      limit\n      totalPages\n      page\n      pagingCounter\n      hasPrevPage\n      hasNextPage\n      prevPage\n      nextPage\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

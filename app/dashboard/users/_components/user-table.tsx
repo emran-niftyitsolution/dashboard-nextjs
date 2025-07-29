@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import DataTable, { Action, Column } from "@/components/ui/data-table";
 import { Edit, Eye, Trash2 } from "lucide-react";
-import { User } from "./types";
+import { User, formatDate, getFullName, getUserInitials } from "./types";
 
 interface UserTableProps {
   users: User[];
@@ -18,15 +18,18 @@ export default function UserTable({
   onEdit,
   onDelete,
 }: UserTableProps) {
-  const getStatusVariant = (status: string) => {
-    return status === "Active" ? "success" : "error";
+  const getStatusVariant = (status?: string) => {
+    if (!status) return "gray";
+    return status === "ACTIVE" ? "success" : "error";
   };
 
-  const getRoleVariant = (role: string) => {
+  const getRoleVariant = (role?: string) => {
+    if (!role) return "gray";
     switch (role) {
-      case "Admin":
+      case "ADMIN":
+      case "SUPER_ADMIN":
         return "purple";
-      case "Moderator":
+      case "MODERATOR":
         return "info";
       default:
         return "gray";
@@ -40,10 +43,12 @@ export default function UserTable({
       render: (user) => (
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center text-primary-foreground font-semibold">
-            {user.avatar}
+            {getUserInitials(user)}
           </div>
           <div>
-            <div className="font-medium text-foreground">{user.name}</div>
+            <div className="font-medium text-foreground">
+              {getFullName(user)}
+            </div>
             <div className="text-sm text-muted-foreground">{user.email}</div>
           </div>
         </div>
@@ -53,21 +58,25 @@ export default function UserTable({
       key: "role",
       header: "Role",
       render: (user) => (
-        <Badge variant={getRoleVariant(user.role)}>{user.role}</Badge>
+        <Badge variant={getRoleVariant(user.role)}>{user.role || "USER"}</Badge>
       ),
     },
     {
       key: "status",
       header: "Status",
       render: (user) => (
-        <Badge variant={getStatusVariant(user.status)}>{user.status}</Badge>
+        <Badge variant={getStatusVariant(user.status)}>
+          {user.status || "PENDING"}
+        </Badge>
       ),
     },
     {
-      key: "lastLogin",
-      header: "Last Login",
+      key: "lastActiveAt",
+      header: "Last Active",
       render: (user) => (
-        <span className="text-sm text-muted-foreground">{user.lastLogin}</span>
+        <span className="text-sm text-muted-foreground">
+          {user.lastActiveAt ? formatDate(user.lastActiveAt) : "Never"}
+        </span>
       ),
     },
   ];

@@ -16,6 +16,13 @@ import {
 } from "lucide-react";
 import { ReactNode, useEffect, useRef, useState } from "react";
 
+// Generate stable IDs to prevent hydration mismatches
+let idCounter = 0;
+const generateId = () => {
+  idCounter += 1;
+  return `tag-${idCounter}`;
+};
+
 export interface SelectOption {
   value: string | number;
   label: string;
@@ -201,7 +208,7 @@ export default function PrimaryInput({
   const handleTagAdd = () => {
     if (tagInput.trim() && onTagAdd && (!maxTags || tags.length < maxTags)) {
       const newTag: Tag = {
-        id: Date.now().toString(),
+        id: generateId(),
         label: tagInput.trim(),
       };
       onTagAdd(newTag);

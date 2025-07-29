@@ -7,7 +7,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import Select, { SelectOption } from "./select";
+import Select, { SelectOption } from "./primary-input";
 
 interface PaginationProps {
   currentPage: number;
@@ -58,6 +58,7 @@ export default function Pagination({
             <div className="flex items-center space-x-2">
               <span className="text-sm text-muted-foreground">Show:</span>
               <Select
+                type="select"
                 value={itemsPerPage}
                 onChange={(value) => onItemsPerPageChange(Number(value))}
                 options={itemsPerPageSelectOptions}

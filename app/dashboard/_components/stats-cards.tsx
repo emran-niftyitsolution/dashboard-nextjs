@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { motion } from "framer-motion";
 import {
   Activity,
   DollarSign,
@@ -10,6 +9,13 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import dynamic from "next/dynamic";
+
+// Dynamically import framer-motion components to prevent SSR issues
+const MotionDiv = dynamic(
+  () => import("framer-motion").then((mod) => ({ default: mod.motion.div })),
+  { ssr: false }
+);
 
 const stats = [
   {
@@ -77,14 +83,14 @@ const cardVariants = {
 
 export default function StatsCards() {
   return (
-    <motion.div
+    <MotionDiv
       variants={containerVariants}
       initial="hidden"
       animate="visible"
       className="grid gap-6 md:grid-cols-2 lg:grid-cols-4"
     >
       {stats.map((stat, index) => (
-        <motion.div key={stat.title} variants={cardVariants}>
+        <MotionDiv key={stat.title} variants={cardVariants}>
           <Card className="group hover:shadow-lg transition-all duration-300 border-0 shadow-sm bg-gradient-to-br from-card to-card/50 backdrop-blur-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -123,8 +129,8 @@ export default function StatsCards() {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
+        </MotionDiv>
       ))}
-    </motion.div>
+    </MotionDiv>
   );
 }
