@@ -108,13 +108,13 @@ export default function Select({
       <div className={`relative ${className}`} ref={dropdownRef}>
         <Button
           variant={variant}
-          size="sm"
+          size={size === "md" ? "default" : size === "lg" ? "lg" : "sm"}
           disabled={disabled}
           onClick={() => {
             console.log("Button clicked, current isOpen:", isOpen);
             !disabled && setIsOpen(!isOpen);
           }}
-          className={`w-full justify-between ${sizeClasses[size]} ${
+          className={`w-full justify-between ${
             disabled ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >
