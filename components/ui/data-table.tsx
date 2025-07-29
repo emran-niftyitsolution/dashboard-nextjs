@@ -94,30 +94,28 @@ export default function DataTable<T>({
         )}
       >
         <div className="overflow-x-auto">
-          <table className="w-full table-fixed">
-            <thead className="bg-muted/50 border-b border-border">
-              <tr>
-                {columns.map((column) => (
-                  <th
-                    key={column.key}
-                    className={cn(
-                      "px-6 py-4 text-left text-sm font-medium text-muted-foreground",
-                      column.className
-                    )}
-                  >
-                    {column.header}
-                  </th>
-                ))}
-                {actions && actions.length > 0 && (
-                  <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground w-20">
-                    Actions
-                  </th>
-                )}
-              </tr>
-            </thead>
-          </table>
           <div className="max-h-96 overflow-y-auto">
-            <table className="w-full table-fixed">
+            <table className="w-full min-w-full">
+              <thead className="bg-muted/50 border-b border-border sticky top-0 z-10">
+                <tr>
+                  {columns.map((column) => (
+                    <th
+                      key={column.key}
+                      className={cn(
+                        "px-6 py-4 text-left text-sm font-medium text-muted-foreground whitespace-nowrap",
+                        column.className
+                      )}
+                    >
+                      {column.header}
+                    </th>
+                  ))}
+                  {actions && actions.length > 0 && (
+                    <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground w-20 whitespace-nowrap">
+                      Actions
+                    </th>
+                  )}
+                </tr>
+              </thead>
               <tbody className="divide-y divide-border">
                 {data.map((item, index) => (
                   <motion.tr
@@ -132,7 +130,10 @@ export default function DataTable<T>({
                     onClick={() => onRowClick?.(item)}
                   >
                     {columns.map((column) => (
-                      <td key={column.key} className="px-6 py-4 text-sm">
+                      <td
+                        key={column.key}
+                        className="px-6 py-4 text-sm whitespace-nowrap"
+                      >
                         {column.render
                           ? column.render(item)
                           : String(
@@ -142,7 +143,7 @@ export default function DataTable<T>({
                       </td>
                     ))}
                     {actions && actions.length > 0 && (
-                      <td className="px-6 py-4 text-right w-20">
+                      <td className="px-6 py-4 text-right w-20 whitespace-nowrap">
                         <div className="flex items-center justify-end space-x-2">
                           {actions.map((action, actionIndex) => (
                             <Button
