@@ -34,6 +34,7 @@ interface DataTableProps<T> {
   loading?: boolean;
   emptyMessage?: string;
   className?: string;
+  roundedTop?: boolean;
 }
 
 export default function DataTable<T>({
@@ -44,10 +45,17 @@ export default function DataTable<T>({
   loading = false,
   emptyMessage = "No data available",
   className = "",
+  roundedTop = false,
 }: DataTableProps<T>) {
   if (loading) {
     return (
-      <Card className={cn("overflow-hidden", className)}>
+      <Card
+        className={cn(
+          "overflow-hidden",
+          roundedTop && "rounded-t-lg rounded-b-none",
+          className
+        )}
+      >
         <div className="p-8 text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
           <p className="mt-2 text-muted-foreground">Loading...</p>
@@ -58,7 +66,13 @@ export default function DataTable<T>({
 
   if (data.length === 0) {
     return (
-      <Card className={cn("overflow-hidden", className)}>
+      <Card
+        className={cn(
+          "overflow-hidden",
+          roundedTop && "rounded-t-lg rounded-b-none",
+          className
+        )}
+      >
         <div className="p-8 text-center">
           <p className="text-muted-foreground">{emptyMessage}</p>
         </div>
@@ -72,7 +86,13 @@ export default function DataTable<T>({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <Card className={cn("overflow-hidden", className)}>
+      <Card
+        className={cn(
+          "overflow-hidden",
+          roundedTop && "rounded-t-lg rounded-b-none",
+          className
+        )}
+      >
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-muted/50 border-b border-border">

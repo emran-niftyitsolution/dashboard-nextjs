@@ -122,6 +122,7 @@ export default function UserTable({
       columns={columns}
       actions={actions}
       emptyMessage="No users found"
+      roundedTop={true}
     />
   );
 }
