@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { DELETE_USER_MUTATION } from "@/lib/graphql/users";
 import { useUsers } from "@/lib/hooks/useUsers";
 import { useMutation } from "@apollo/client";
@@ -141,15 +141,13 @@ export default function UsersPage() {
 
         {/* Table with Pagination */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
         >
           <Card className="overflow-hidden">
             {loading ? (
-              <div className="p-8 text-center">
-                <LoadingSpinner size="md" text="Loading users..." />
-              </div>
+              <TableSkeleton rows={5} columns={5} />
             ) : (
               <>
                 <UserTable
