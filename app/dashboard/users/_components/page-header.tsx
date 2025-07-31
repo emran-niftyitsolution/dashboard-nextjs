@@ -3,8 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function PageHeader() {
+  const router = useRouter();
+
+  const handleCreateUser = () => {
+    router.push("/dashboard/users/create");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -18,7 +25,10 @@ export default function PageHeader() {
           Manage your application users and their permissions
         </p>
       </div>
-      <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+      <Button
+        onClick={handleCreateUser}
+        className="bg-primary hover:bg-primary/90 text-primary-foreground"
+      >
         <Plus className="w-4 h-4 mr-2" />
         Add User
       </Button>

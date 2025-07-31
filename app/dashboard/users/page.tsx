@@ -3,10 +3,14 @@
 import { Card } from "@/components/ui/card";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { DELETE_USER_MUTATION } from "@/lib/graphql/users";
 import { useUsers } from "@/lib/hooks/useUsers";
+import { useMutation } from "@apollo/client";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import DeleteConfirmationModal from "./_components/delete-confirmation-modal";
 import PageHeader from "./_components/page-header";
 import UserPagination from "./_components/pagination";
 import { User } from "./_components/types";
@@ -14,11 +18,15 @@ import UserFilters from "./_components/user-filters";
 import UserTable from "./_components/user-table";
 
 export default function UsersPage() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Debounce search term to avoid too many API calls
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -42,6 +50,7 @@ export default function UsersPage() {
   };
 
   const { users, pagination, loading, error, refetch } = useUsers(apiOptions);
+  const [deleteUser] = useMutation(DELETE_USER_MUTATION);
 
   // Filter users by role on client-side since backend doesn't support it yet
   const filteredUsers =
@@ -72,13 +81,45 @@ export default function UsersPage() {
   };
 
   const handleEdit = (user: User) => {
-    console.log("Edit user:", user);
-    // TODO: Implement edit user modal/page
+    router.push(`/dashboard/users/${user._id}/edit`);
   };
 
   const handleDelete = (user: User) => {
-    console.log("Delete user:", user);
-    // TODO: Implement delete user confirmation
+    setUserToDelete(user);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return;
+
+    try {
+      setIsDeleting(true);
+
+      const response = await deleteUser({
+        variables: {
+          input: { _id: userToDelete._id },
+        },
+      });
+
+      if (response.data?.softDeleteUser) {
+        toast.success("User deleted successfully!");
+        refetch(); // Refresh the user list
+      }
+    } catch (error: any) {
+      console.error("Delete user error:", error);
+      const errorMessage =
+        error.graphQLErrors?.[0]?.message || "Failed to delete user";
+      toast.error(errorMessage);
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
+      setUserToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+    setUserToDelete(null);
   };
 
   return (
@@ -136,6 +177,15 @@ export default function UsersPage() {
           </Card>
         </motion.div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        user={userToDelete}
+        isOpen={isDeleteModalOpen}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
+      />
     </ErrorBoundary>
   );
 }
