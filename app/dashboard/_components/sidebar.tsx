@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { LayoutDashboard, Palette, User, Users } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { cn } from "../../../lib/utils";
 import { useSidebar } from "./sidebar-context";
 
 const menuItems = [
@@ -64,7 +65,11 @@ export default function Sidebar() {
           </motion.div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2">
+          <nav
+            className={cn("flex-1 p-4 space-y-2", {
+              "p-3": isCollapsed,
+            })}
+          >
             {menuItems.map((item, index) => (
               <motion.div
                 key={item.label}
