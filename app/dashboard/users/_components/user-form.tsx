@@ -16,7 +16,7 @@ import { User } from "./types";
 
 interface UserFormProps {
   user?: User | null;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: Partial<User> & { password?: string }) => void;
   onCancel: () => void;
   isLoading?: boolean;
   mode: "create" | "update";
@@ -67,9 +67,12 @@ export default function UserForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    let submitData: any = { ...formData };
+    let submitData: Partial<User> & { password?: string } = { ...formData };
 
     if (mode === "update") {
+      // Remove email from update data since it's not allowed to be updated
+      delete submitData.email;
+
       Object.keys(submitData).forEach((key) => {
         if (submitData[key as keyof typeof submitData] === "") {
           delete submitData[key as keyof typeof submitData];
@@ -132,14 +135,18 @@ export default function UserForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
+            <Label htmlFor="email">
+              Email {mode === "update" && "(cannot be changed)"} *
+            </Label>
             <Input
               id="email"
               type="email"
               value={formData.email}
               onChange={(e) => handleChange("email", e.target.value)}
               placeholder="Enter email address"
-              required
+              required={mode === "create"}
+              disabled={mode === "update"}
+              className={mode === "update" ? "bg-muted cursor-not-allowed" : ""}
             />
           </div>
 

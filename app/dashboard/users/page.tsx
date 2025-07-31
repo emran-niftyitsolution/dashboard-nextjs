@@ -105,10 +105,11 @@ export default function UsersPage() {
         toast.success("User deleted successfully!");
         refetch(); // Refresh the user list
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Delete user error:", error);
       const errorMessage =
-        error.graphQLErrors?.[0]?.message || "Failed to delete user";
+        (error as { graphQLErrors?: Array<{ message: string }> })
+          ?.graphQLErrors?.[0]?.message || "Failed to delete user";
       toast.error(errorMessage);
     } finally {
       setIsDeleting(false);

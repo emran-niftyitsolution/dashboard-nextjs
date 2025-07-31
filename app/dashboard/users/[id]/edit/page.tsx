@@ -25,7 +25,9 @@ export default function EditUserPage() {
 
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (
+    formData: Partial<User> & { password?: string }
+  ) => {
     try {
       setIsLoading(true);
 
@@ -42,10 +44,11 @@ export default function EditUserPage() {
         toast.success("User updated successfully!");
         router.push("/dashboard/users");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Update user error:", error);
       const errorMessage =
-        error.graphQLErrors?.[0]?.message || "Failed to update user";
+        (error as { graphQLErrors?: Array<{ message: string }> })
+          ?.graphQLErrors?.[0]?.message || "Failed to update user";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -95,7 +98,7 @@ export default function EditUserPage() {
             User Not Found
           </h2>
           <p className="text-muted-foreground mt-2">
-            The user you're looking for doesn't exist.
+            The user you&apos;re looking for doesn&apos;t exist.
           </p>
           <button
             onClick={() => router.push("/dashboard/users")}

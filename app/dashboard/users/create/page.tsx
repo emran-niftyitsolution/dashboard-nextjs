@@ -7,6 +7,7 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { User } from "../_components/types";
 import UserForm from "../_components/user-form";
 
 export default function CreateUserPage() {
@@ -15,7 +16,9 @@ export default function CreateUserPage() {
 
   const [createUser] = useMutation(CREATE_USER_MUTATION);
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (
+    formData: Partial<User> & { password?: string }
+  ) => {
     try {
       setIsLoading(true);
 
@@ -29,10 +32,11 @@ export default function CreateUserPage() {
         toast.success("User created successfully!");
         router.push("/dashboard/users");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Create user error:", error);
       const errorMessage =
-        error.graphQLErrors?.[0]?.message || "Failed to create user";
+        (error as { graphQLErrors?: Array<{ message: string }> })
+          ?.graphQLErrors?.[0]?.message || "Failed to create user";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
