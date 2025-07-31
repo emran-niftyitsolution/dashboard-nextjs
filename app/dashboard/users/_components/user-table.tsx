@@ -41,7 +41,7 @@ export default function UserTable({
   const columns: Column<User>[] = [
     {
       key: "serial",
-      header: "#",
+      header: "S/N",
       render: (user, index) => (
         <span className="text-sm text-muted-foreground font-medium">
           {startIndex + index}

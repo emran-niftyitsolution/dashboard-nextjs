@@ -44,9 +44,7 @@ export default function Pagination({
   );
 
   return (
-    <div
-      className={`px-6 py-4 border-t border-border bg-muted/20 ${className}`}
-    >
+    <div className={`px-6 py-4 bg-muted/20 ${className}`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="text-sm text-muted-foreground">

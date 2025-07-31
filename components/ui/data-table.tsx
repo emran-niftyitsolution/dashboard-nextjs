@@ -51,7 +51,7 @@ export default function DataTable<T>({
     return (
       <Card
         className={cn(
-          "overflow-hidden",
+          "overflow-hidden shadow-none border-0",
           roundedTop && "rounded-t-lg rounded-b-none",
           className
         )}
@@ -68,7 +68,7 @@ export default function DataTable<T>({
     return (
       <Card
         className={cn(
-          "overflow-hidden",
+          "overflow-hidden shadow-none border-0",
           roundedTop && "rounded-t-lg rounded-b-none",
           className
         )}
@@ -88,7 +88,7 @@ export default function DataTable<T>({
     >
       <Card
         className={cn(
-          "overflow-hidden",
+          "overflow-hidden shadow-none border-0",
           roundedTop && "rounded-t-lg rounded-b-none",
           className
         )}
@@ -96,7 +96,7 @@ export default function DataTable<T>({
         <div className="overflow-x-auto">
           <div className="max-h-[410px] overflow-y-auto">
             <table className="w-full min-w-full">
-              <thead className="bg-gray-100 border-b border-border sticky top-0 z-10">
+              <thead className="bg-gray-100 sticky top-0 z-10">
                 <tr>
                   {columns.map((column) => (
                     <th
@@ -116,7 +116,7 @@ export default function DataTable<T>({
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody>
                 {data.map((item, index) => (
                   <motion.tr
                     key={index}
@@ -124,7 +124,7 @@ export default function DataTable<T>({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     className={cn(
-                      "hover:bg-muted/50 transition-colors cursor-pointer",
+                      "hover:bg-muted/50 transition-colors cursor-pointer border-b border-border",
                       onRowClick && "cursor-pointer"
                     )}
                     onClick={() => onRowClick?.(item)}
