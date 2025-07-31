@@ -33,11 +33,14 @@ export default function Sidebar() {
     <>
       {/* Sidebar */}
       <div
-        className={`fixed lg:absolute lg:left-0 z-40 h-screen bg-card border-r border-border shadow-lg transition-all duration-300 ${
-          isCollapsed
-            ? "lg:w-16 w-0 transform -translate-x-full lg:translate-x-0"
-            : "w-72"
-        }`}
+        className={cn(
+          "fixed lg:absolute lg:left-0 z-40 h-screen bg-card border-r border-border shadow-lg transition-all duration-300",
+          {
+            "lg:w-16 w-0 transform -translate-x-full lg:translate-x-0":
+              isCollapsed,
+            "w-72": !isCollapsed,
+          }
+        )}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
@@ -45,9 +48,12 @@ export default function Sidebar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className={`flex items-center space-x-3 p-6 border-b border-border h-16 ${
-              isCollapsed ? "lg:justify-center lg:space-x-0" : ""
-            }`}
+            className={cn(
+              "flex items-center space-x-3 p-6 border-b border-border h-16",
+              {
+                "lg:justify-center lg:space-x-0": isCollapsed,
+              }
+            )}
           >
             <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
               <span className="p-4 text-primary-foreground font-bold text-lg">
@@ -79,18 +85,24 @@ export default function Sidebar() {
               >
                 <Button
                   variant={getActiveItem() === item.label ? "default" : "ghost"}
-                  className={`w-full justify-start h-12 text-left transition-all duration-200 ${
-                    isCollapsed ? "lg:justify-center lg:px-2" : ""
-                  } ${
-                    getActiveItem() === item.label
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "hover:bg-accent hover:text-accent-foreground"
-                  }`}
+                  className={cn(
+                    "w-full justify-start h-12 text-left transition-all duration-200",
+                    {
+                      "lg:justify-center lg:px-2": isCollapsed,
+                      "bg-primary text-primary-foreground shadow-md":
+                        getActiveItem() === item.label,
+                      "hover:bg-accent hover:text-accent-foreground":
+                        getActiveItem() !== item.label,
+                    }
+                  )}
                   onClick={() => handleNavigation(item.href)}
                   title={isCollapsed ? item.label : undefined}
                 >
                   <item.icon
-                    className={`w-5 h-5 ${isCollapsed ? "lg:mr-0" : "mr-3"}`}
+                    className={cn("w-5 h-5", {
+                      "lg:mr-0": isCollapsed,
+                      "mr-3": !isCollapsed,
+                    })}
                   />
                   {!isCollapsed && item.label}
                 </Button>
