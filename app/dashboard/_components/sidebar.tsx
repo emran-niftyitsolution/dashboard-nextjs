@@ -32,8 +32,10 @@ export default function Sidebar() {
     <>
       {/* Sidebar */}
       <div
-        className={`fixed lg:absolute lg:left-0 z-40 w-70 h-screen bg-card border-r border-border shadow-lg transition-transform duration-300 ${
-          isCollapsed ? "transform -translate-x-full" : ""
+        className={`fixed lg:absolute lg:left-0 z-40 h-screen bg-card border-r border-border shadow-lg transition-all duration-300 ${
+          isCollapsed
+            ? "lg:w-16 w-0 transform -translate-x-full lg:translate-x-0"
+            : "w-72"
         }`}
       >
         <div className="flex flex-col h-full">
@@ -42,19 +44,23 @@ export default function Sidebar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="flex items-center space-x-3 p-6 border-b border-border h-16"
+            className={`flex items-center space-x-3 p-6 border-b border-border h-16 ${
+              isCollapsed ? "lg:justify-center lg:space-x-0" : ""
+            }`}
           >
             <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-primary-foreground font-bold text-lg">
+              <span className="p-4 text-primary-foreground font-bold text-lg">
                 D
               </span>
             </div>
-            <div className="flex-1">
-              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                Dashboard
-              </h1>
-              <p className="text-xs text-muted-foreground">Admin Panel</p>
-            </div>
+            {!isCollapsed && (
+              <div className="flex-1">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                  Dashboard
+                </h1>
+                <p className="text-xs text-muted-foreground">Admin Panel</p>
+              </div>
+            )}
           </motion.div>
 
           {/* Navigation */}
@@ -69,40 +75,47 @@ export default function Sidebar() {
                 <Button
                   variant={getActiveItem() === item.label ? "default" : "ghost"}
                   className={`w-full justify-start h-12 text-left transition-all duration-200 ${
+                    isCollapsed ? "lg:justify-center lg:px-2" : ""
+                  } ${
                     getActiveItem() === item.label
                       ? "bg-primary text-primary-foreground shadow-md"
                       : "hover:bg-accent hover:text-accent-foreground"
                   }`}
                   onClick={() => handleNavigation(item.href)}
+                  title={isCollapsed ? item.label : undefined}
                 >
-                  <item.icon className="w-5 h-5 mr-3" />
-                  {item.label}
+                  <item.icon
+                    className={`w-5 h-5 ${isCollapsed ? "lg:mr-0" : "mr-3"}`}
+                  />
+                  {!isCollapsed && item.label}
                 </Button>
               </motion.div>
             ))}
           </nav>
 
           {/* Developer Credit */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="p-4 border-t border-border"
-          >
-            <div className="text-center">
-              <p className="text-xs text-muted-foreground">
-                Developed by{" "}
-                <a
-                  href="https://www.linkedin.com/in/ibnshayed/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-primary underline hover:text-primary/80 transition-colors"
-                >
-                  Emran Ibn Shayed
-                </a>
-              </p>
-            </div>
-          </motion.div>
+          {!isCollapsed && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="p-4 border-t border-border"
+            >
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground">
+                  Developed by{" "}
+                  <a
+                    href="https://www.linkedin.com/in/ibnshayed/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-primary underline hover:text-primary/80 transition-colors"
+                  >
+                    Emran Ibn Shayed
+                  </a>
+                </p>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
 

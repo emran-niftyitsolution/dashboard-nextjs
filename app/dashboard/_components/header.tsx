@@ -75,19 +75,19 @@ export default function Header() {
 
   return (
     <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm px-6 flex items-center justify-between sticky top-0 z-30">
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 min-w-0">
         {/* Sidebar Toggle Button */}
         <Button
           variant="ghost"
           size="icon"
           onClick={toggleSidebar}
-          className="hover:bg-accent"
+          className="hover:bg-accent w-10 h-10 flex-shrink-0"
         >
           <Menu className="w-5 h-5" />
         </Button>
       </div>
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 flex-1 justify-end">
         {/* Search */}
         <div className="hidden md:block relative">
           <Input
@@ -99,7 +99,11 @@ export default function Header() {
 
         {/* Notifications */}
         <div className="relative flex items-center justify-center">
-          <Button variant="ghost" size="icon" className="relative">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative w-10 h-10 flex-shrink-0"
+          >
             <Bell className="w-5 h-5" />
           </Button>
           {unreadCount > 0 && (
@@ -114,26 +118,26 @@ export default function Header() {
         </div>
 
         {/* User Menu */}
-        <div className="relative" ref={userMenuRef}>
+        <div className="relative flex-shrink-0" ref={userMenuRef}>
           <Button
             variant="ghost"
-            className="flex items-center space-x-2 h-10 px-3"
+            className="flex items-center space-x-2 h-10 px-3 min-w-0"
             onClick={() => setShowUserMenu(!showUserMenu)}
           >
-            <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center shadow-md">
+            <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center shadow-md flex-shrink-0">
               <span className="text-primary-foreground text-sm font-semibold">
                 {getUserInitials()}
               </span>
             </div>
-            <div className="hidden md:block text-left">
-              <p className="text-sm font-medium">
+            <div className="hidden md:block text-left min-w-0">
+              <p className="text-sm font-medium truncate">
                 {user ? `${user.firstName} ${user.lastName}` : "User"}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground truncate">
                 {user?.email || "user@example.com"}
               </p>
             </div>
-            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+            <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
           </Button>
 
           <AnimatePresence>
@@ -195,8 +199,8 @@ export default function Header() {
       </div>
 
       {/* Mobile search button */}
-      <div className="md:hidden">
-        <Button variant="ghost" size="icon">
+      <div className="md:hidden flex-shrink-0">
+        <Button variant="ghost" size="icon" className="w-10 h-10">
           <Search className="w-5 h-5" />
         </Button>
       </div>
