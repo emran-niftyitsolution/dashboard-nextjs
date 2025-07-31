@@ -26,6 +26,16 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: unknown) {
     console.error("ErrorBoundary caught an error:", error, errorInfo);
+
+    // In production, you would send this to your error reporting service
+    // Example: Sentry.captureException(error, { extra: errorInfo });
+
+    // Log additional context for debugging
+    console.group("Error Boundary Details");
+    console.error("Error:", error);
+    console.error("Error Info:", errorInfo);
+    console.error("Component Stack:", errorInfo);
+    console.groupEnd();
   }
 
   render() {

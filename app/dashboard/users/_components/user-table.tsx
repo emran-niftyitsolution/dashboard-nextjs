@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import DataTable, { Action, Column } from "@/components/ui/data-table";
 import { Edit, Eye, Trash2 } from "lucide-react";
+import React from "react";
 import { User, formatDate, getFullName, getUserInitials } from "./types";
 
 interface UserTableProps {
@@ -13,19 +14,19 @@ interface UserTableProps {
   startIndex?: number;
 }
 
-export default function UserTable({
+const UserTable = React.memo(function UserTable({
   users,
   onView,
   onEdit,
   onDelete,
   startIndex = 1,
 }: UserTableProps) {
-  const getStatusVariant = (status?: string) => {
+  const getStatusVariant = React.useCallback((status?: string) => {
     if (!status) return "gray";
     return status === "ACTIVE" ? "success" : "error";
-  };
+  }, []);
 
-  const getRoleVariant = (role?: string) => {
+  const getRoleVariant = React.useCallback((role?: string) => {
     if (!role) return "gray";
     switch (role) {
       case "ADMIN":
@@ -36,7 +37,7 @@ export default function UserTable({
       default:
         return "gray";
     }
-  };
+  }, []);
 
   const columns: Column<User>[] = [
     {
@@ -132,4 +133,6 @@ export default function UserTable({
       roundedTop={true}
     />
   );
-}
+});
+
+export default UserTable;
