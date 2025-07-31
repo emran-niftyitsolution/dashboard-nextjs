@@ -10,6 +10,7 @@ interface UserTableProps {
   onView?: (user: User) => void;
   onEdit?: (user: User) => void;
   onDelete?: (user: User) => void;
+  startIndex?: number;
 }
 
 export default function UserTable({
@@ -17,6 +18,7 @@ export default function UserTable({
   onView,
   onEdit,
   onDelete,
+  startIndex = 1,
 }: UserTableProps) {
   const getStatusVariant = (status?: string) => {
     if (!status) return "gray";
@@ -37,6 +39,15 @@ export default function UserTable({
   };
 
   const columns: Column<User>[] = [
+    {
+      key: "serial",
+      header: "#",
+      render: (user, index) => (
+        <span className="text-sm text-muted-foreground font-medium">
+          {startIndex + index}
+        </span>
+      ),
+    },
     {
       key: "user",
       header: "User",

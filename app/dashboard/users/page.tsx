@@ -157,6 +157,11 @@ export default function UsersPage() {
                   onView={handleView}
                   onEdit={handleEdit}
                   onDelete={handleDelete}
+                  startIndex={
+                    pagination
+                      ? (pagination.page - 1) * pagination.limit + 1
+                      : 1
+                  }
                 />
                 {pagination && (
                   <UserPagination

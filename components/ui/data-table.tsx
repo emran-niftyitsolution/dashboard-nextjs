@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 export interface Column<T> {
   key: string;
   header: string;
-  render?: (item: T) => ReactNode;
+  render?: (item: T, index: number) => ReactNode;
   className?: string;
 }
 
@@ -135,7 +135,7 @@ export default function DataTable<T>({
                         className="px-6 py-4 text-sm whitespace-nowrap"
                       >
                         {column.render
-                          ? column.render(item)
+                          ? column.render(item, index)
                           : String(
                               (item as Record<string, unknown>)[column.key] ||
                                 ""
