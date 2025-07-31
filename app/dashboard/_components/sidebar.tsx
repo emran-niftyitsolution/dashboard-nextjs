@@ -92,9 +92,14 @@ export default function Sidebar() {
             <div className="text-center">
               <p className="text-xs text-muted-foreground">
                 Developed by{" "}
-                <span className="font-medium text-primary">
+                <a
+                  href="https://www.linkedin.com/in/ibnshayed/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary underline hover:text-primary/80 transition-colors"
+                >
                   Emran Ibn Shayed
-                </span>
+                </a>
               </p>
             </div>
           </motion.div>
