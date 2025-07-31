@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import {
   BarChart3,
   LayoutDashboard,
+  Palette,
   Settings,
   User,
   Users,
@@ -16,6 +17,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "Overview", href: "/dashboard" },
   { icon: Users, label: "Users", href: "/dashboard/users" },
   { icon: BarChart3, label: "Analytics", href: "/dashboard/analytics" },
+  { icon: Palette, label: "Radix UI Demo", href: "/dashboard/radix-demo" },
   { icon: User, label: "Profile", href: "/dashboard/profile" },
   { icon: Settings, label: "Settings", href: "/dashboard/settings" },
 ];

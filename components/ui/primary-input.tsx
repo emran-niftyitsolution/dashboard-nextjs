@@ -3,6 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import {
@@ -180,7 +187,7 @@ export default function PrimaryInput({
   }, [searchQuery, onSearch, searchDebounce]);
 
   const sizeClasses = {
-    sm: "h-8 px-2 text-sm",
+    sm: "h-9 px-2 text-sm",
     md: "h-10 px-3 text-sm",
     lg: "h-12 px-4 text-base",
   };
@@ -247,6 +254,39 @@ export default function PrimaryInput({
         );
 
       case "select":
+        return (
+          <Select
+            value={String(value)}
+            onValueChange={(newValue) => onChange(newValue)}
+            disabled={disabled}
+          >
+            <SelectTrigger className={`${sizeClasses[size]} ${className}`}>
+              <div className="flex items-center space-x-2">
+                {icon && <span className="text-muted-foreground">{icon}</span>}
+                <SelectValue placeholder={placeholder} />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              {options.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={String(option.value)}
+                  disabled={option.disabled}
+                >
+                  <div className="flex items-center space-x-2">
+                    {option.icon && (
+                      <span className="text-muted-foreground">
+                        {option.icon}
+                      </span>
+                    )}
+                    <span>{option.label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        );
+
       case "multi-select":
         const selectedOptions = multiple
           ? options.filter(
@@ -259,10 +299,10 @@ export default function PrimaryInput({
           <div className="relative" ref={dropdownRef}>
             <Button
               variant="outline"
-              size="sm"
+              size={size === "sm" ? "sm" : size === "lg" ? "lg" : "default"}
               disabled={disabled}
               onClick={() => !disabled && setIsOpen(!isOpen)}
-              className={`w-full justify-between ${sizeClasses[size]} ${
+              className={`w-full justify-between ${
                 disabled ? "opacity-50 cursor-not-allowed" : ""
               } ${className}`}
             >
@@ -323,7 +363,7 @@ export default function PrimaryInput({
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search options..."
-                        className="pl-8 h-8 text-sm"
+                        className="pl-8 h-9 text-sm"
                       />
                     </div>
                   </div>
@@ -395,13 +435,13 @@ export default function PrimaryInput({
                   onChange={(e) => setTagInput(e.target.value)}
                   placeholder={tagInputPlaceholder}
                   onKeyPress={(e) => e.key === "Enter" && handleTagAdd()}
-                  className="flex-1 h-8 text-sm"
+                  className="flex-1 h-9 text-sm"
                 />
                 <Button
                   size="sm"
                   onClick={handleTagAdd}
                   disabled={!tagInput.trim()}
-                  className="h-8 px-2"
+                  className="h-9 px-2"
                 >
                   <Plus className="w-4 h-4" />
                 </Button>
